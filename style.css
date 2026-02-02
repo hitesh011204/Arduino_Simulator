@@ -1,0 +1,121 @@
+/* RESET */
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* LAYOUT */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  background: #f4f4f4;
+  border-right: 2px solid #ccc;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  text-align: center;
+}
+
+/* DROPDOWN */
+.view-selector {
+  width: 100%;
+  padding: 8px;
+  font-size: 15px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+/* COMPONENT LIST */
+.component {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 14px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  cursor: grab;
+  background: #fff;
+}
+
+.component img {
+  width: 55px;
+  height: 55px;
+  margin-right: 10px;
+}
+
+.component span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* CANVAS */
+.canvas {
+  flex: 1;
+  position: relative;
+  border: 2px dashed #ccc;
+}
+
+/* DROPPED COMPONENT */
+.canvas-component {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border: 1px dashed #888;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.canvas-component img {
+  width: 60px;
+}
+
+.canvas-component span {
+  margin-left: 6px;
+  font-size: 13px;
+}
+
+/* SIM BUTTON */
+.sim-controls {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#simToggleBtn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #4caf50;
+  color: white;
+}
+
+#simToggleBtn.stop {
+  background: #f44336;
+}
+
+/* CODE VIEW */
+.code-area {
+  background: #1e1e1e;
+  color: #00ff90;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: Consolas, monospace;
+  font-size: 13px;
+}
+
+/* UTILITY */
+.hidden {
+  display: none;
+}

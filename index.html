@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arduino Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- DROPDOWN -->
+    <select id="viewSelector" class="view-selector">
+      <option value="components">Components</option>
+      <option value="code">Code</option>
+    </select>
+
+    <!-- COMPONENT VIEW -->
+    <div id="componentsView">
+      <h2>Components</h2>
+
+      <div class="component" id="arduino" draggable="true">
+        <img src="images/arduino.png">
+        <span>Arduino Uno</span>
+      </div>
+
+      <div class="component" id="led" draggable="true">
+        <img src="images/led.jpg">
+        <span>LED</span>
+      </div>
+
+      <div class="component" id="button" draggable="true">
+        <img src="images/button.jpg">
+        <span>Push Button</span>
+      </div>
+    </div>
+
+    <!-- CODE VIEW -->
+    <div id="codeView" class="hidden">
+      <h2>Arduino Code</h2>
+      <pre id="arduinoCode" class="code-area"></pre>
+    </div>
+
+  </div>
+
+  <!-- RIGHT CANVAS -->
+  <div class="canvas" id="canvas">
+
+    <!-- START / STOP BUTTON -->
+    <div class="sim-controls">
+      <button id="simToggleBtn">START</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
