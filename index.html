@@ -3,38 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arduino Simulator</title>
+  <title>Minimal Arduino Simulator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div class="container">
 
+  <!-- ========================= -->
   <!-- LEFT SIDEBAR -->
+  <!-- ========================= -->
   <div class="sidebar">
 
-    <!-- DROPDOWN -->
+    <!-- VIEW SWITCH -->
     <select id="viewSelector" class="view-selector">
       <option value="components">Components</option>
       <option value="code">Code</option>
     </select>
 
-    <!-- COMPONENT VIEW -->
+    <!-- COMPONENT PALETTE -->
     <div id="componentsView">
       <h2>Components</h2>
 
-      <div class="component" id="arduino" draggable="true">
-        <img src="images/arduino.png">
+      <div class="component" data-type="arduino" draggable="true">
+        <img src="images/arduino.png" alt="Arduino">
         <span>Arduino Uno</span>
       </div>
 
-      <div class="component" id="led" draggable="true">
-        <img src="images/led.jpg">
+      <div class="component" data-type="led" draggable="true">
+        <img src="images/led.jpg" alt="LED">
         <span>LED</span>
       </div>
 
-      <div class="component" id="button" draggable="true">
-        <img src="images/button.jpg">
+      <div class="component" data-type="button" draggable="true">
+        <img src="images/button.jpg" alt="Button">
         <span>Push Button</span>
       </div>
     </div>
@@ -47,10 +49,12 @@
 
   </div>
 
-  <!-- RIGHT CANVAS -->
+  <!-- ========================= -->
+  <!-- CANVAS -->
+  <!-- ========================= -->
   <div class="canvas" id="canvas">
 
-    <!-- START / STOP BUTTON -->
+    <!-- SIMULATION CONTROLS -->
     <div class="sim-controls">
       <button id="simToggleBtn">START</button>
     </div>
@@ -58,6 +62,48 @@
   </div>
 
 </div>
+
+<!-- ========================= -->
+<!-- COMPONENT TEMPLATES -->
+<!-- ========================= -->
+
+<!-- ===== ARDUINO UNO ===== -->
+<template id="arduino-template">
+  <div class="canvas-component arduino-board">
+    <strong>Arduino Uno</strong>
+
+    <div class="digital-pins">
+      <div class="pin" data-type="digital" data-pin="13">D13</div>
+      <div class="pin" data-type="digital" data-pin="12">D12</div>
+      <div class="pin" data-type="digital" data-pin="11">D11</div>
+      <div class="pin" data-type="digital" data-pin="10">D10</div>
+      <div class="pin" data-type="digital" data-pin="9">D9</div>
+      <div class="pin" data-type="digital" data-pin="8">D8</div>
+      <div class="pin" data-type="digital" data-pin="7">D7</div>
+      <div class="pin" data-type="digital" data-pin="6">D6</div>
+      <div class="pin" data-type="digital" data-pin="5">D5</div>
+      <div class="pin" data-type="digital" data-pin="4">D4</div>
+      <div class="pin" data-type="digital" data-pin="3">D3</div>
+      <div class="pin" data-type="digital" data-pin="2">D2</div>
+    </div>
+  </div>
+</template>
+
+<!-- ===== LED ===== -->
+<template id="led-template">
+  <div class="canvas-component led-component">
+    <strong>LED</strong>
+    <div class="terminal pin" data-type="led">● Signal</div>
+  </div>
+</template>
+
+<!-- ===== PUSH BUTTON ===== -->
+<template id="button-template">
+  <div class="canvas-component button-component">
+    <strong>Push Button</strong>
+    <div class="terminal pin" data-type="button">● Signal</div>
+  </div>
+</template>
 
 <script src="app.js"></script>
 </body>

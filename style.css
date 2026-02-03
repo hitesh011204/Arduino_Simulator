@@ -1,17 +1,24 @@
+/* ============================= */
 /* RESET */
+/* ============================= */
 body {
   margin: 0;
   height: 100vh;
   font-family: Arial, sans-serif;
+  background: #fff;
 }
 
+/* ============================= */
 /* LAYOUT */
+/* ============================= */
 .container {
   display: flex;
   height: 100vh;
 }
 
+/* ============================= */
 /* SIDEBAR */
+/* ============================= */
 .sidebar {
   width: 280px;
   background: #f4f4f4;
@@ -24,7 +31,9 @@ body {
   text-align: center;
 }
 
+/* ============================= */
 /* DROPDOWN */
+/* ============================= */
 .view-selector {
   width: 100%;
   padding: 8px;
@@ -33,7 +42,9 @@ body {
   border-radius: 6px;
 }
 
-/* COMPONENT LIST */
+/* ============================= */
+/* COMPONENT LIST (LEFT) */
+/* ============================= */
 .component {
   display: flex;
   align-items: center;
@@ -56,38 +67,153 @@ body {
   font-weight: bold;
 }
 
+/* ============================= */
 /* CANVAS */
+/* ============================= */
 .canvas {
   flex: 1;
   position: relative;
   border: 2px dashed #ccc;
+  background: #fafafa;
+  overflow: hidden;
 }
 
-/* DROPPED COMPONENT */
+/* ============================= */
+/* CANVAS COMPONENT (IMPORTANT FIX) */
+/* ============================= */
 .canvas-component {
   position: absolute;
-  display: flex;
-  align-items: center;
-  padding: 6px;
-  border: 1px dashed #888;
-  background: #fafafa;
-  border-radius: 6px;
+  display: flex;              /* FIX 1 */
+  flex-direction: column;     /* FIX 2 */
+  align-items: center;        /* FIX 3 */
+
+  min-width: 120px;           /* FIX 4 */
+  min-height: 80px;           /* FIX 5 */
+
+  padding: 12px;
+  border: 2px solid #555;
+  background: #ffffff;
+  border-radius: 10px;
+
+  cursor: move;
+  user-select: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.canvas-component img {
-  width: 60px;
-}
-
-.canvas-component span {
-  margin-left: 6px;
+/* fallback text */
+.canvas-component::before {
+  content: attr(data-label);
+  font-weight: bold;
   font-size: 13px;
+  margin-bottom: 6px;
 }
 
+/* ============================= */
+/* ARDUINO BOARD */
+/* ============================= */
+.arduino-board {
+  width: 220px;
+  background: #2c7be5;
+  color: #fff;
+}
+
+.arduino-board strong {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+/* DIGITAL PINS */
+.digital-pins {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+/* PIN */
+.pin {
+  background: #ffffff;
+  color: #000;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #333;
+}
+
+.pin:hover {
+  background: #ffeb3b;
+}
+
+/* PIN CONNECTED */
+.pin.connected {
+  background: #4caf50;
+  color: #fff;
+  border-color: #2e7d32;
+}
+
+/* ============================= */
+/* LED COMPONENT */
+/* ============================= */
+.led-component {
+  width: 140px;
+  background: #fff3cd;
+  border-color: #f0ad4e;
+}
+
+.led-component strong {
+  margin-bottom: 10px;
+}
+
+/* ============================= */
+/* BUTTON COMPONENT */
+/* ============================= */
+.button-component {
+  width: 150px;
+  background: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.button-component strong {
+  margin-bottom: 10px;
+}
+
+/* ============================= */
+/* TERMINALS */
+/* ============================= */
+.terminal {
+  margin-top: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.terminal:hover {
+  background: #ff5722;
+}
+
+.terminal.selected {
+  background: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255,152,0,0.4);
+}
+
+.terminal.connected {
+  background: #4caf50;
+}
+
+/* ============================= */
 /* SIM BUTTON */
+/* ============================= */
 .sim-controls {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 10;
 }
 
 #simToggleBtn {
@@ -105,7 +231,9 @@ body {
   background: #f44336;
 }
 
+/* ============================= */
 /* CODE VIEW */
+/* ============================= */
 .code-area {
   background: #1e1e1e;
   color: #00ff90;
@@ -113,9 +241,13 @@ body {
   border-radius: 6px;
   font-family: Consolas, monospace;
   font-size: 13px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
+/* ============================= */
 /* UTILITY */
+/* ============================= */
 .hidden {
   display: none;
 }
