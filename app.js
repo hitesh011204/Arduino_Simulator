@@ -21,6 +21,9 @@ const pinState = {
   button: 2
 };
 
+// logic simulation state
+const pinValues = {}; // pin number -> true(HIGH)/false(LOW)
+
 // component references
 let arduinoRef = null;
 let ledRef = null;
@@ -89,6 +92,7 @@ canvas.addEventListener("drop", e => {
   if (type === "button") {
     buttonRef = el;
     redrawConnections();
+    enableButtonSimulation(buttonRef);
   }
 });
 
@@ -107,7 +111,7 @@ viewSelector.addEventListener("change", () => {
 });
 
 // ===============================
-// PIN SELECTION (PROMPT VERSION)
+// PIN SELECTION
 // ===============================
 function enablePinSelection(arduino) {
   arduino.querySelectorAll(".pin").forEach(pin => {
@@ -124,8 +128,7 @@ function askPinAssignment(pinEl) {
   let input = prompt(
     `Assign component to pin ${pinNumber}:\nType "led" or "button" (leave blank to clear)`
   );
-
-  if (input === null) return; // cancelled
+  if (input === null) return;
   input = input.trim().toLowerCase();
 
   if (input !== "led" && input !== "button" && input !== "") {
@@ -144,11 +147,7 @@ function assignPin(pin, component) {
     if (pinState.led === pin) pinState.led = null;
     if (pinState.button === pin) pinState.button = null;
   } else {
-    // prevent duplicate usage
-    if (
-      (component === "led" && pin === pinState.button) ||
-      (component === "button" && pin === pinState.led)
-    ) {
+    if ((component === "led" && pin === pinState.button) || (component === "button" && pin === pinState.led)) {
       alert("Pin already in use by other component!");
       return;
     }
@@ -158,7 +157,9 @@ function assignPin(pin, component) {
   }
 
   redrawConnections();
-  if (viewSelector.value === "code") generateArduinoCode();
+  generateArduinoCode();
+  updateLEDState();
+  updateButtonVisual();
 }
 
 function getComponentUsingPin(pin) {
@@ -174,9 +175,7 @@ function redrawConnections() {
   connections.forEach(c => c.wire.remove());
   connections.length = 0;
 
-  document.querySelectorAll(".pin").forEach(p =>
-    p.classList.remove("connected")
-  );
+  document.querySelectorAll(".pin").forEach(p => p.classList.remove("connected"));
 
   if (arduinoRef && ledRef && pinState.led) autoWire("led");
   if (arduinoRef && buttonRef && pinState.button) autoWire("button");
@@ -186,7 +185,6 @@ function autoWire(type) {
   const pinNum = pinState[type];
   const arduinoPin = arduinoRef.querySelector(`.pin[data-pin="${pinNum}"]`);
   const target = type === "led" ? ledRef.querySelector(".pin") : buttonRef.querySelector(".pin");
-
   if (!arduinoPin || !target) return;
 
   createWire(arduinoPin, target);
@@ -197,15 +195,19 @@ function autoWire(type) {
 // ===============================
 function generateArduinoCode() {
   let code = `// Arduino Simulation Code\nvoid setup() {\n`;
-
   if (pinState.led) code += `  pinMode(${pinState.led}, OUTPUT); // LED\n`;
   if (pinState.button) code += `  pinMode(${pinState.button}, INPUT); // Button\n`;
-
   code += `}\n\nvoid loop() {\n`;
-  if (pinState.led) code += `  // digitalWrite(${pinState.led}, HIGH/LOW);\n`;
-  if (pinState.button) code += `  // int buttonState = digitalRead(${pinState.button});\n`;
-  code += `}\n`;
 
+  if (pinState.button && pinState.led) {
+    code += `  int buttonState = digitalRead(${pinState.button});\n`;
+    code += `  digitalWrite(${pinState.led}, buttonState);\n`;
+  } else {
+    if (pinState.led) code += `  // digitalWrite(${pinState.led}, HIGH/LOW);\n`;
+    if (pinState.button) code += `  // int buttonState = digitalRead(${pinState.button});\n`;
+  }
+
+  code += `}\n`;
   arduinoCode.textContent = code;
 }
 
@@ -226,11 +228,9 @@ function enableCanvasDragging(component) {
 
 document.addEventListener("mousemove", e => {
   if (!dragTarget) return;
-
   const c = canvas.getBoundingClientRect();
   dragTarget.style.left = e.clientX - c.left - offsetX + "px";
   dragTarget.style.top = e.clientY - c.top - offsetY + "px";
-
   updateAllWires();
 });
 
@@ -257,9 +257,7 @@ function createWire(a, b) {
 }
 
 function updateAllWires() {
-  connections.forEach(c =>
-    updateWirePosition(c.from, c.to, c.wire)
-  );
+  connections.forEach(c => updateWirePosition(c.from, c.to, c.wire));
 }
 
 function updateWirePosition(a, b, line) {
@@ -282,7 +280,72 @@ function pinCenter(pin) {
 }
 
 // ===============================
-// SIMULATION BUTTON
+// BUTTON LOGIC (REAL PUSH BUTTON)
+// ===============================
+function enableButtonSimulation(button) {
+  const btnTerminal = button.querySelector(".pin");
+  const buttonPin = pinState.button;
+  const ledPin = pinState.led;
+
+  if (buttonPin !== null) pinValues[buttonPin] = false;
+  if (ledPin !== null) pinValues[ledPin] = false;
+
+  updateButtonVisual();
+  updateLEDState();
+
+  btnTerminal.addEventListener("mousedown", () => {
+    if (!buttonPin) return;
+    pinValues[buttonPin] = true;
+    if (ledPin) pinValues[ledPin] = true;
+    updateButtonVisual();
+    updateLEDState();
+  });
+
+  btnTerminal.addEventListener("mouseup", () => {
+    if (!buttonPin) return;
+    pinValues[buttonPin] = false;
+    if (ledPin) pinValues[ledPin] = false;
+    updateButtonVisual();
+    updateLEDState();
+  });
+
+  btnTerminal.addEventListener("mouseleave", () => {
+    if (!buttonPin) return;
+    pinValues[buttonPin] = false;
+    if (ledPin) pinValues[ledPin] = false;
+    updateButtonVisual();
+    updateLEDState();
+  });
+}
+
+function updateLEDState() {
+  if (!ledRef || !pinState.led) return;
+  const ledTerminal = ledRef.querySelector(".pin");
+  const state = pinValues[pinState.led] || false;
+  if (state) {
+    ledTerminal.style.background = "#ffeb3b";
+    ledTerminal.style.boxShadow = "0 0 15px #ffeb3b";
+  } else {
+    ledTerminal.style.background = "#333";
+    ledTerminal.style.boxShadow = "none";
+  }
+}
+
+function updateButtonVisual() {
+  if (!buttonRef || !pinState.button) return;
+  const btnTerminal = buttonRef.querySelector(".pin");
+  const state = pinValues[pinState.button] || false;
+  if (state) {
+    btnTerminal.style.background = "#ff5722";
+    btnTerminal.style.boxShadow = "0 0 10px #ff5722";
+  } else {
+    btnTerminal.style.background = "#333";
+    btnTerminal.style.boxShadow = "none";
+  }
+}
+
+// ===============================
+// SIMULATION TOGGLE BUTTON
 // ===============================
 simToggleBtn.onclick = () => {
   isRunning = !isRunning;

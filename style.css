@@ -9,7 +9,7 @@ body {
 }
 
 /* ============================= */
-/* LAYOUT */
+/* MAIN LAYOUT */
 /* ============================= */
 .container {
   display: flex;
@@ -17,10 +17,10 @@ body {
 }
 
 /* ============================= */
-/* SIDEBAR */
+/* SIDEBAR / COMPONENT PANEL */
 /* ============================= */
 .sidebar {
-  width: 280px;
+  width: 280px; /* slightly bigger */
   background: #f4f4f4;
   border-right: 2px solid #ccc;
   padding: 14px;
@@ -29,10 +29,11 @@ body {
 
 .sidebar h2 {
   text-align: center;
+  margin-bottom: 16px;
 }
 
 /* ============================= */
-/* DROPDOWN */
+/* VIEW SELECTOR DROPDOWN */
 /* ============================= */
 .view-selector {
   width: 100%;
@@ -43,7 +44,7 @@ body {
 }
 
 /* ============================= */
-/* COMPONENT LIST (LEFT) */
+/* COMPONENT LIST (SIDEBAR ITEMS) */
 /* ============================= */
 .component {
   display: flex;
@@ -54,6 +55,11 @@ body {
   border-radius: 6px;
   cursor: grab;
   background: #fff;
+  transition: all 0.2s ease;
+}
+
+.component:hover {
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 .component img {
@@ -68,7 +74,17 @@ body {
 }
 
 /* ============================= */
-/* CANVAS */
+/* MAIN AREA (CANVAS + CODE) */
+/* ============================= */
+.main-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================= */
+/* CANVAS AREA */
 /* ============================= */
 .canvas {
   flex: 1;
@@ -79,28 +95,25 @@ body {
 }
 
 /* ============================= */
-/* CANVAS COMPONENT (IMPORTANT FIX) */
+/* COMPONENTS ON CANVAS */
 /* ============================= */
 .canvas-component {
   position: absolute;
-  display: flex;              /* FIX 1 */
-  flex-direction: column;     /* FIX 2 */
-  align-items: center;        /* FIX 3 */
-
-  min-width: 120px;           /* FIX 4 */
-  min-height: 80px;           /* FIX 5 */
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 130px;
+  min-height: 90px;
   padding: 12px;
   border: 2px solid #555;
-  background: #ffffff;
+  background: #fff;
   border-radius: 10px;
-
   cursor: move;
   user-select: none;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
 }
 
-/* fallback text */
 .canvas-component::before {
   content: attr(data-label);
   font-weight: bold;
@@ -109,12 +122,14 @@ body {
 }
 
 /* ============================= */
-/* ARDUINO BOARD */
+/* ARDUINO BOARD COMPONENT */
 /* ============================= */
 .arduino-board {
-  width: 220px;
+  width: 240px;
   background: #2c7be5;
   color: #fff;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .arduino-board strong {
@@ -124,14 +139,14 @@ body {
   font-size: 15px;
 }
 
-/* DIGITAL PINS */
+/* DIGITAL PINS GRID */
 .digital-pins {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
 
-/* PIN */
+/* PIN STYLING */
 .pin {
   background: #ffffff;
   color: #000;
@@ -141,13 +156,13 @@ body {
   text-align: center;
   cursor: pointer;
   border: 1px solid #333;
+  transition: all 0.2s ease;
 }
 
 .pin:hover {
   background: #ffeb3b;
 }
 
-/* PIN CONNECTED */
 .pin.connected {
   background: #4caf50;
   color: #fff;
@@ -158,9 +173,11 @@ body {
 /* LED COMPONENT */
 /* ============================= */
 .led-component {
-  width: 140px;
+  width: 150px;
   background: #fff3cd;
   border-color: #f0ad4e;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .led-component strong {
@@ -171,18 +188,18 @@ body {
 /* BUTTON COMPONENT */
 /* ============================= */
 .button-component {
-  width: 150px;
+  width: 160px;
   background: #e3f2fd;
   border-color: #2196f3;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .button-component strong {
   margin-bottom: 10px;
 }
 
-/* ============================= */
-/* TERMINALS */
-/* ============================= */
+/* TERMINALS (FOR BUTTONS/LED) */
 .terminal {
   margin-top: 8px;
   padding: 6px 14px;
@@ -191,6 +208,7 @@ body {
   color: #fff;
   font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .terminal:hover {
@@ -207,7 +225,7 @@ body {
 }
 
 /* ============================= */
-/* SIM BUTTON */
+/* SIMULATION BUTTON */
 /* ============================= */
 .sim-controls {
   position: absolute;
@@ -224,7 +242,8 @@ body {
   border-radius: 6px;
   cursor: pointer;
   background: #4caf50;
-  color: white;
+  color: #fff;
+  transition: all 0.2s ease;
 }
 
 #simToggleBtn.stop {
@@ -232,21 +251,22 @@ body {
 }
 
 /* ============================= */
-/* CODE VIEW */
+/* CODE VIEW AREA */
 /* ============================= */
 .code-area {
+  flex: 1;
   background: #1e1e1e;
   color: #00ff90;
   padding: 12px;
   border-radius: 6px;
   font-family: Consolas, monospace;
   font-size: 13px;
-  max-height: 80vh;
   overflow-y: auto;
+  width: 100%; /* full width of main-area */
 }
 
 /* ============================= */
-/* UTILITY */
+/* HIDDEN ELEMENTS UTILITY */
 /* ============================= */
 .hidden {
   display: none;
